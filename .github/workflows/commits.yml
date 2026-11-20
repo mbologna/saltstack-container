@@ -13,4 +13,4 @@ permissions:
 
 jobs:
   commits:
-    uses: mbologna/.github/.github/workflows/commits.yml@5202f489ca7748a2c29abf92d9b322aff9e63886 # main
+    uses: mbologna/.github/.github/workflows/commits.yml@9ca465f46d12622fb9e80279c649667d99fc74df # main

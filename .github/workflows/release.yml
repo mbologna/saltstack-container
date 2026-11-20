@@ -12,10 +12,13 @@ jobs:
     permissions:
       contents: write
       actions: write
-    uses: mbologna/.github/.github/workflows/auto-release.yml@5202f489ca7748a2c29abf92d9b322aff9e63886 # main
+    uses: mbologna/.github/.github/workflows/auto-release.yml@9ca465f46d12622fb9e80279c649667d99fc74df # main
     with:
       strategy: conventional
       image: docker.io/mbologna/saltstack-master
+      # Both images for the fresh rebuild: a release cut when either image's
+      # distribution has fixes its rebuild would pick up.
+      images: docker.io/mbologna/saltstack-master=Dockerfile-master docker.io/mbologna/saltstack-minion=Dockerfile-minion
       dockerfiles: Dockerfile-master Dockerfile-minion
       # Tags carry the pinned Salt as build metadata (v1.1.0+up3006.0),
       # pattern A of mbologna/.github's VERSIONING.md.
