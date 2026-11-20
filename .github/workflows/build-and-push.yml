@@ -71,6 +71,26 @@ jobs:
       yamllint_paths: .github/workflows/ docker-compose.yml
     secrets: inherit
 
+  # Both images install the same Salt, the release tag's metadata
+  # (ARG SALT_VERSION in each Dockerfile; Renovate can't move it).
+  salt-pin:
+    name: Salt pin
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - run: |
+          master=$(sed -n 's/^ARG SALT_VERSION=//p' Dockerfile-master)
+          minion=$(sed -n 's/^ARG SALT_VERSION=//p' Dockerfile-minion)
+          if [ -z "$master" ] || [ "$master" != "$minion" ]; then
+            echo "::error::SALT_VERSION differs: Dockerfile-master '${master}', Dockerfile-minion '${minion}'"
+            exit 1
+          fi
+          echo "Both images pin Salt ${master}"
+
   # A push to the default branch releases at once only a CVE fix: the wrapper
   # runs the security strategy, comparing the base images of both Dockerfiles
   # with the last release's. Monday's release and manual runs are release.yml.
@@ -86,4 +106,5 @@ jobs:
       image: docker.io/mbologna/saltstack-master
       dockerfiles: Dockerfile-master Dockerfile-minion
       dispatch_workflow: build-and-push.yml
+      metadata_command: printf 'up%s' "$(sed -n 's/^ARG SALT_VERSION=//p' Dockerfile-master)"
     secrets: inherit
