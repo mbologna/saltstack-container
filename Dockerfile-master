@@ -10,10 +10,16 @@ LABEL maintainer="Michele Bologna <mb@michelebologna.net>" \
 
 # salt-master + salt-api provide the netapi (cherrypy) interface on port 9080.
 # curl is used by the HEALTHCHECK, shadow provides useradd for the PAM test user.
+# The Salt release both images install, pinned so that a release tag can
+# say which (vX.Y.Z+up<SALT_VERSION>): zypper takes the newest Leap build
+# of it and fails if Leap doesn't have it. Repology doesn't list Leap 16, so
+# Renovate can't move it: when Leap ships a new Salt, bump it here and in
+# Dockerfile-minion (CI checks that they match).
+ARG SALT_VERSION=3006.0
 # hadolint ignore=DL3037
 RUN zypper --non-interactive install --no-recommends \
-        salt-master \
-        salt-api \
+        "salt-master=${SALT_VERSION}" \
+        "salt-api=${SALT_VERSION}" \
         curl \
         shadow && \
     zypper clean --all && \

@@ -12,11 +12,14 @@ jobs:
     permissions:
       contents: write
       actions: write
-    uses: mbologna/.github/.github/workflows/auto-release.yml@423fe81596d69d9cd74191195ee6d3af7f9bf360 # main
+    uses: mbologna/.github/.github/workflows/auto-release.yml@5202f489ca7748a2c29abf92d9b322aff9e63886 # main
     with:
       strategy: conventional
       image: docker.io/mbologna/saltstack-master
       dockerfiles: Dockerfile-master Dockerfile-minion
+      # Tags carry the pinned Salt as build metadata (v1.1.0+up3006.0),
+      # pattern A of mbologna/.github's VERSIONING.md.
+      metadata_command: printf 'up%s' "$(sed -n 's/^ARG SALT_VERSION=//p' Dockerfile-master)"
       # The images build in build-and-push.yml. Dispatching this workflow on
       # the tag instead re-ran auto-release there: 995 tags on 2026-10-18.
       dispatch_workflow: build-and-push.yml
