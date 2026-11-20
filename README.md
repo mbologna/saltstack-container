@@ -189,7 +189,7 @@ Base image, packages, and pinned GitHub Actions are kept current by
 
 Release tags are this repository's SemVer with the Salt release the images
 install as build metadata: `v1.1.0+up3006.0` is version 1.1.0, running Salt
-3006.0 (pattern A of the
+3006.0 (see the
 [versioning standard](https://github.com/mbologna/.github/blob/main/VERSIONING.md)).
 [auto-release](https://github.com/mbologna/auto-release) cuts them from the
 Conventional Commits: a `feat` is a minor, a `fix` a patch, a breaking change a
