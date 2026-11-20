@@ -20,8 +20,8 @@ jobs:
       # distribution has fixes its rebuild would pick up.
       images: docker.io/mbologna/saltstack-master=Dockerfile-master docker.io/mbologna/saltstack-minion=Dockerfile-minion
       dockerfiles: Dockerfile-master Dockerfile-minion
-      # Tags carry the pinned Salt as build metadata (v1.1.0+up3006.0),
-      # pattern A of mbologna/.github's VERSIONING.md.
+      # Tags carry the pinned Salt as SemVer build metadata (v1.1.0+up3006.0),
+      # as mbologna/.github's VERSIONING.md describes.
       metadata_command: printf 'up%s' "$(sed -n 's/^ARG SALT_VERSION=//p' Dockerfile-master)"
       # The images build in build-and-push.yml. Dispatching this workflow on
       # the tag instead re-ran auto-release there: 995 tags on 2026-10-18.
