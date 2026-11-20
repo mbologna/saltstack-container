@@ -11,9 +11,10 @@ Ready-to-run [SaltStack](https://saltproject.io/) images built on a pinned
 | **[`mbologna/saltstack-master`](https://hub.docker.com/r/mbologna/saltstack-master)** | Salt master that auto-accepts minion keys and serves the `salt-api` (cherrypy / netapi) HTTP interface on port `9080`. |
 | **[`mbologna/saltstack-minion`](https://hub.docker.com/r/mbologna/saltstack-minion)** | Salt minion preconfigured to connect to a master reachable as `salt`. |
 
-Images are published on each release, tagged `latest`, the detected Salt
-version (e.g. `3006.0` and `3006`), `sha-<commit>`, and semver (`vX.Y.Z`) from
-the release's git tag.
+Images are published on each release, tagged `latest`, the Salt version they
+run (e.g. `3006.0` and `3006`), `sha-<commit>`, and the release's version
+(`X.Y.Z` and `X.Y`, without the `v` of the git tag). See
+[Versioning](#versioning).
 
 > **For testing, not production.** salt-api is served over plain HTTP and the
 > images ship a fixed `saltdev` account, auto-accept any minion key and run
@@ -183,3 +184,18 @@ Base image, packages, and pinned GitHub Actions are kept current by
 ## License
 
 [MIT](LICENSE) © Michele Bologna
+
+## Versioning
+
+Release tags are this repository's SemVer with the Salt release the images
+install as build metadata: `v1.1.0+up3006.0` is version 1.1.0, running Salt
+3006.0 (pattern A of the
+[versioning standard](https://github.com/mbologna/.github/blob/main/VERSIONING.md)).
+[auto-release](https://github.com/mbologna/auto-release) cuts them from the
+Conventional Commits: a `feat` is a minor, a `fix` a patch, a breaking change a
+major, and a Salt bump releases on its own. Image tags can't contain `+`, so
+images get `1.1.0`, `1.1`, `latest` and the Salt version tags `3006.0` and
+`3006`; pick the Salt tags to test against a Salt release, or the version tags
+to pin this repository's build. `ARG SALT_VERSION` in both Dockerfiles is the
+pin, moved by hand when Leap ships a new Salt. Release notes are on the
+[Releases page](https://github.com/mbologna/saltstack-container/releases).
