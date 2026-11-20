@@ -24,7 +24,7 @@ jobs:
   # SUSE/salt-netapi-client) keep working. Only release tags publish, to GHCR
   # and Docker Hub; pull requests build without pushing.
   master:
-    uses: mbologna/.github/.github/workflows/docker-ci.yml@5202f489ca7748a2c29abf92d9b322aff9e63886 # main
+    uses: mbologna/.github/.github/workflows/docker-ci.yml@9ca465f46d12622fb9e80279c649667d99fc74df # main
     permissions:
       contents: write
       packages: write
@@ -49,7 +49,7 @@ jobs:
     secrets: inherit
 
   minion:
-    uses: mbologna/.github/.github/workflows/docker-ci.yml@5202f489ca7748a2c29abf92d9b322aff9e63886 # main
+    uses: mbologna/.github/.github/workflows/docker-ci.yml@9ca465f46d12622fb9e80279c649667d99fc74df # main
     permissions:
       contents: write
       packages: write
@@ -100,10 +100,13 @@ jobs:
     permissions:
       contents: write
       actions: write
-    uses: mbologna/.github/.github/workflows/auto-release.yml@5202f489ca7748a2c29abf92d9b322aff9e63886 # main
+    uses: mbologna/.github/.github/workflows/auto-release.yml@9ca465f46d12622fb9e80279c649667d99fc74df # main
     with:
       strategy: conventional
       image: docker.io/mbologna/saltstack-master
+      # Both images for the fresh rebuild: a release cut when either image's
+      # distribution has fixes its rebuild would pick up.
+      images: docker.io/mbologna/saltstack-master=Dockerfile-master docker.io/mbologna/saltstack-minion=Dockerfile-minion
       dockerfiles: Dockerfile-master Dockerfile-minion
       dispatch_workflow: build-and-push.yml
       metadata_command: printf 'up%s' "$(sed -n 's/^ARG SALT_VERSION=//p' Dockerfile-master)"
