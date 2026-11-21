@@ -173,10 +173,26 @@ working by enabling them in `etc_master/salt/master.d/netapi.conf`.
 
 ## Continuous integration
 
-[`build-and-push.yml`](.github/workflows/build-and-push.yml) lints
-(hadolint + yamllint), runs the integration test, then builds both images for
-`linux/amd64`. On pushes to the default branch it also pushes the images to
-Docker Hub and scans them with Trivy; pull requests build and test only.
+[`build-and-push.yml`](.github/workflows/build-and-push.yml) builds each
+image through mbologna/.github's
+[`docker-ci.yml`](https://github.com/mbologna/.github/blob/main/.github/workflows/docker-ci.yml),
+one job per Dockerfile, for `linux/amd64` and `linux/arm64` (docker-ci's
+default platforms). Both jobs set `publish: release`, so only a `v*` tag
+pushes an image:
+
+| Event | What runs |
+|---|---|
+| Pull request | hadolint (when a Dockerfile changed) and yamllint, then both images build and pass the image policy check; nothing is pushed |
+| Push to the default branch | Lint only; nothing is built or pushed. auto-release's `security` strategy releases at once if the push fixes a CVE |
+| `v*` tag | Both images build and go to Docker Hub and GHCR (`ghcr.io/mbologna/saltstack-master`, `ghcr.io/mbologna/saltstack-minion`), then a Trivy scan, a cosign signature and the integration test |
+
+Every run also checks that both Dockerfiles pin the same Salt release.
+
+[`release.yml`](.github/workflows/release.yml) runs auto-release on Monday at
+06:00 UTC and on a manual run, and starts `build-and-push.yml` on the tag it
+pushes. Both auto-release callers pass both images in the `images` input, so
+the fresh rebuild checks each one: a patch release is cut when either image's
+last release has fixable HIGH or CRITICAL findings that a rebuild picks up.
 
 Base image, packages, and pinned GitHub Actions are kept current by
 [Renovate](https://docs.renovatebot.com/) via `renovate.json`.
