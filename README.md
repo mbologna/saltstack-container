@@ -197,6 +197,16 @@ last release has fixable HIGH or CRITICAL findings that a rebuild picks up.
 Base image, packages, and pinned GitHub Actions are kept current by
 [Renovate](https://docs.renovatebot.com/) via `renovate.json`.
 
+## Why not an existing tool
+
+- The official [`saltstack/salt`](https://hub.docker.com/r/saltstack/salt)
+  image's newest tag is 3006.5, last updated on 2024-02-01.
+- No maintained image ships salt-api with the netapi clients enabled, PAM
+  authentication for a test user, and minion keys accepted automatically,
+  which is what a test fixture needs.
+
+Checked 2026-11-23.
+
 ## License
 
 [MIT](LICENSE) © Michele Bologna
