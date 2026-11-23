@@ -24,7 +24,7 @@ jobs:
   # SUSE/salt-netapi-client) keep working. Only release tags publish, to GHCR
   # and Docker Hub; pull requests build without pushing.
   master:
-    uses: mbologna/.github/.github/workflows/docker-ci.yml@074693c8ed17163910daa587c82c02a2cd9451d7 # main
+    uses: mbologna/.github/.github/workflows/docker-ci.yml@698761bc5a4c53f01bfc6c2303da576418c8ec04 # main
     permissions:
       contents: write
       packages: write
@@ -49,7 +49,7 @@ jobs:
     secrets: inherit
 
   minion:
-    uses: mbologna/.github/.github/workflows/docker-ci.yml@074693c8ed17163910daa587c82c02a2cd9451d7 # main
+    uses: mbologna/.github/.github/workflows/docker-ci.yml@698761bc5a4c53f01bfc6c2303da576418c8ec04 # main
     permissions:
       contents: write
       packages: write
@@ -100,7 +100,7 @@ jobs:
     permissions:
       contents: write
       actions: write
-    uses: mbologna/.github/.github/workflows/auto-release.yml@074693c8ed17163910daa587c82c02a2cd9451d7 # main
+    uses: mbologna/.github/.github/workflows/auto-release.yml@698761bc5a4c53f01bfc6c2303da576418c8ec04 # main
     with:
       strategy: conventional
       image: docker.io/mbologna/saltstack-master
